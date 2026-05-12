@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JASEN App</title>
+
+    <style>
+        :root{
+            --primary:#7b5cff;
+            --secondary:#00c6ff;
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body{
+            background:#f3ecff;
+        }
+
+        /* APP CONTAINER */
+        .app{
+            max-width:420px;
+            margin:auto;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* INICIO / SPLASH */
+        .header{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            background:linear-gradient(135deg,#7b5cff,#00c6ff);
+            text-align:center;
+            color:white;
+        }
+
+        /* EFECTO DINÁMICO PARA EL LOGO */
+        .logo{
+            width:250px;
+            max-width:80%;
+            border-radius: 20px;
+            /* Añadimos la animación aquí: nombre, duración, tipo de curva, infinita */
+            animation: breathing 4s ease-in-out infinite;
+        }
+
+        /* Definición de la animación de "respiración" y brillo */
+        @keyframes breathing {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(123, 92, 255, 0.5); /* Brillo suave color primario */
+            }
+            50% {
+                transform: scale(1.05); /* Agranda sutilmente */
+                box-shadow: 0 0 25px rgba(0, 198, 255, 0.8); /* Brillo más fuerte color secundario */
+            }
+        }
+
+        .slogan{
+            margin: 20px 0;
+            font-size:20px;
+            font-weight:bold;
+        }
+
+        /* MAIN CONTENT */
+        main{
+            flex:1;
+            padding:15px;
+            padding-bottom:80px;
+            background:#f3ecff;
+        }
+
+        .section{
+            display:none;
+        }
+
+        .section.active{
+            display:block;
+        }
+
+        /* CARDS */
+        .card{
+            background:white;
+            padding:20px;
+            border-radius:15px;
+            margin-bottom:15px;
+            text-align:center;
+            box-shadow:0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* BOTONES */
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:10px;
+            background:linear-gradient(45deg,#7b5cff,#00c6ff);
+            color:white;
+            font-weight: bold;
+            cursor:pointer;
+            transition: 0.3s;
+        }
+
+        button:active{
+            transform: scale(0.98);
+        }
+
+        .btn-sec{
+            background:#eee;
+            color:#555;
+        }
+
+        /* INPUTS */
+        input, textarea{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border: 1px solid #ddd;
+            border-radius:10px;
+            outline: none;
+        }
+
+        /* CHAT STYLE */
+        .messages{
+            height:300px;
+            overflow-y:auto;
+            background:#e5ddd5;
+            padding:10px;
+            border-radius:10px;
+            display:flex;
+            flex-direction:column;
+        }
+
+        .message{
+            padding:10px;
+            margin:5px 0;
+            border-radius:15px;
+            max-width:80%;
+            font-size: 14px;
+        }
+
+        .user{ background:#dcf8c6; align-self:flex-end; border-bottom-right-radius: 0; }
+        .bot{ background:white; align-self:flex-start; border-bottom-left-radius: 0; }
+
+        .chat-input{ display:flex; gap:5px; margin-top:10px; }
+        .chat-input input{ flex:1; margin-top:0; border-radius:20px; }
+        .chat-input button{ width:auto; margin-top:0; border-radius:50%; padding: 10px 15px; }
+
+        /* NAV BAR */
+        .bottom-nav{
+            display:flex;
+            justify-content:space-around;
+            background:white;
+            padding:10px;
+            position:fixed;
+            bottom:0;
+            width:100%;
+            max-width:420px;
+            border-top: 1px solid #eee;
+        }
+
+        .bottom-nav button{
+            background:none;
+            border:none;
+            font-size:22px;
+            color:#bbb;
+            width: auto;
+            margin: 0;
+            padding: 5px;
+        }
+
+        .bottom-nav button.active{
+            color:#7b5cff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <section id="inicio" class="section active header">
+        <img src="logo.jpg" alt="Logo JASEN" class="logo">
+        <p class="slogan">Encuentra tu próximo empleo</p>
+        <button style="width: 200px;" onclick="show('jobs', document.getElementById('nav-jobs'))">Entrar</button>
+    </section>
+
+    <main>
+        <section id="jobs" class="section">
+            <div class="card"><h3>Grupo Bimbo</h3><p>Producción</p><button onclick="openForm('Grupo Bimbo')">Postular</button></div>
+            <div class="card"><h3>Amazon México</h3><p>Logística</p><button onclick="openForm('Amazon México')">Postular</button></div>
+            <div class="card"><h3>BBVA México</h3><p>Banca</p><button onclick="openForm('BBVA México')">Postular</button></div>
+            <div class="card"><h3>OXXO</h3><p>Cajero</p><button onclick="openForm('OXXO')">Postular</button></div>
+            <div class="card"><h3>Coca-Cola FEMSA</h3><p>Distribución</p><button onclick="openForm('Coca-Cola FEMSA')">Postular</button></div>
+            <div class="card"><h3>Mercado Libre</h3><p>Almacén</p><button onclick="openForm('Mercado Libre')">Postular</button></div>
+            <div class="card"><h3>Starbucks</h3><p>Barista</p><button onclick="openForm('Starbucks')">Postular</button></div>
+        </section>
+
+        <section id="info" class="section">
+            <div class="card"><h3>MISIÓN</h3><p>Conectar personas con empleo de forma rápida y segura.</p></div>
+            <div class="card"><h3>VISIÓN</h3><p>Ser líder en empleo a nivel nacional.</p></div>
+            <div class="card"><h3>📞 Contacto</h3><p>empresajasen@gmail.com<br>@JASEN.COBAEJ</p></div>
+        </section>
+
+        <section id="form" class="section">
+            <div class="card">
+                <h2 id="vacanteTitulo">📋 Postulación</h2>
+                <input type="text" id="nombre" placeholder="Nombre completo">
+                <input type="email" id="correo" placeholder="Correo electrónico">
+                <input type="tel" id="telefono" placeholder="Teléfono">
+                <textarea id="experiencia" placeholder="Cuéntanos tu experiencia..." rows="4"></textarea>
+                <button onclick="enviar()">Enviar Postulación</button>
+                <button class="btn-sec" onclick="show('jobs')">⬅ Regresar</button>
+            </div>
+        </section>
+
+        <section id="chat" class="section">
+            <div class="card">
+                <h3>💬 Chat JASEN</h3>
+                <div class="messages" id="messages"></div>
+                <div class="chat-input">
+                    <input id="chatInput" placeholder="Escribe un mensaje...">
+                    <button onclick="sendMessage()">➤</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="bottom-nav">
+        <button onclick="show('inicio', this)">🏠</button>
+        <button id="nav-jobs" onclick="show('jobs', this)">💼</button>
+        <button onclick="show('info', this)">ℹ️</button>
+        <button onclick="show('chat', this)">💬</button>
+    </div>
+
+</div>
+
+<script>
+    // 1. FUNCIÓN NAVEGACIÓN
+    function show(id, btn) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+
+        if (btn) {
+            document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        window.scrollTo(0,0);
+    }
+
+    // 2. FUNCIÓN FORMULARIO (Limpia campos automáticamente)
+    function openForm(empresa) {
+        document.getElementById('nombre').value = '';
+        document.getElementById('correo').value = '';
+        document.getElementById('telefono').value = '';
+        document.getElementById('experiencia').value = '';
+        
+        if(empresa) {
+            document.getElementById('vacanteTitulo').innerText = '📋 Postular a ' + empresa;
+        }
+        show('form');
+    }
+
+    function enviar() {
+        const nombre = document.getElementById('nombre').value;
+        if(nombre === "") {
+            alert("Por favor, escribe tu nombre.");
+            return;
+        }
+        alert("✅ Postulación enviada con éxito. ¡Suerte!");
+        show('jobs');
+    }
+
+    // 3. LÓGICA DEL CHAT INTELIGENTE
+    function sendMessage() {
+        let input = document.getElementById('chatInput');
+        let rawText = input.value.trim();
+        let text = rawText.toLowerCase();
+        
+        if (text === '') return;
+
+        addMsg(rawText, 'user');
+        input.value = '';
+
+        setTimeout(() => {
+            let respuestaBot = "Lo siento, no entiendo tu pregunta. Prueba con 'vacantes', 'ayuda' o 'contacto'. 😅";
+
+            const baseDeDatos = {
+                "hola": "¡Hola! Soy el asistente virtual de JASEN. ¿En qué puedo ayudarte? 👋",
+                "vacantes": "Puedes ver todas nuestras vacantes disponibles haciendo clic en el icono del maletín 💼.",
+                "empleo": "Tenemos puestos en Bimbo, Amazon, BBVA y más. ¡Postúlate ahora!",
+                "contacto": "Puedes contactarnos al correo: empresajasen@gmail.com o en redes como @JASEN.COBAEJ",
+                "requisitos": "Generalmente solo necesitas ser mayor de edad y tener ganas de trabajar.",
+                "sueldo": "Los sueldos dependen de la vacante. Te daremos detalles tras revisar tu postulación.",
+                "ayuda": "Puedo informarte sobre: vacantes, contacto, requisitos y cómo postularte.",
+                "gracias": "¡De nada! Estamos para servirte. 😊",
+                "adiós": "¡Hasta pronto! Mucho éxito en tu búsqueda laboral. ✨"
+            };
+
+            for (let clave in baseDeDatos) {
+                if (text.includes(clave)) {
+                    respuestaBot = baseDeDatos[clave];
+                    break;
+                }
+            }
+
+            addMsg(respuestaBot, 'bot');
+        }, 600);
+    }
+
+    function addMsg(text, type) {
+        let msg = document.createElement('div');
+        msg.className = 'message ' + type;
+        msg.textContent = text;
+        let chat = document.getElementById('messages');
+        chat.appendChild(msg);
+        chat.scrollTop = chat.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

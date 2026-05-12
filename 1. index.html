@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASEN App</title>
+
+<style>
+:root{
+    --primary:#7b5cff;
+    --secondary:#00c6ff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI';
+}
+
+body{
+    background:#f3ecff;
+}
+
+/* APP */
+.app{
+    max-width:420px;
+    margin:auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* INICIO GRANDE */
+.header{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:linear-gradient(135deg,#7b5cff,#00c6ff);
+    text-align:center;
+    color:white;
+}
+
+.logo{
+    width:350px;
+    max-width:90%;
+}
+
+.slogan{
+    margin-top:25px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+/* MAIN */
+main{
+    flex:1;
+    padding:15px;
+    padding-bottom:80px;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+/* CARDS */
+.card{
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:15px;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* BOTONES */
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(45deg,#7b5cff,#00c6ff);
+    color:white;
+    cursor:pointer;
+}
+
+.btn-sec{
+    background:#ccc;
+    color:black;
+}
+
+/* INPUT */
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+}
+
+/* CHAT WHATSAPP */
+.messages{
+    height:300px;
+    overflow-y:auto;
+    background:#e5ddd5;
+    padding:10px;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+}
+
+.message{
+    padding:10px;
+    margin:5px 0;
+    border-radius:15px;
+    max-width:75%;
+}
+
+.user{
+    background:#dcf8c6;
+    align-self:flex-end;
+}
+
+.bot{
+    background:white;
+    align-self:flex-start;
+}
+
+.chat-input{
+    display:flex;
+    gap:5px;
+    margin-top:10px;
+}
+
+.chat-input input{
+    flex:1;
+    border-radius:20px;
+}
+
+.chat-input button{
+    width:auto;
+    border-radius:50%;
+}
+
+/* NAV */
+.bottom-nav{
+    display:flex;
+    justify-content:space-around;
+    background:white;
+    padding:10px;
+    position:fixed;
+    bottom:0;
+    width:100%;
+    max-width:420px;
+}
+
+.bottom-nav button{
+    background:none;
+    border:none;
+    font-size:20px;
+    color:#888;
+}
+
+.bottom-nav button.active{
+    color:#7b5cff;
+}
+</style>
+<script>
+
+function show(id,btn){
+
+document.querySelectorAll('.section')
+.forEach(s=>s.classList.remove('active'));
+
+document.getElementById(id)
+.classList.add('active');
+
+if(btn){
+
+document.querySelectorAll('.bottom-nav button')
+.forEach(b=>b.classList.remove('active'));
+
+btn.classList.add('active');
+}
+
+}
+
+/* ABRIR FORMULARIO */
+function openForm(empresa){
+
+/* LIMPIAR INPUTS */
+document.getElementById('nombre').value='';
+document.getElementById('correo').value='';
+document.getElementById('telefono').value='';
+document.getElementById('experiencia').value='';
+
+/* CAMBIAR TITULO */
+document.getElementById('vacanteTitulo')
+.innerHTML='📋 Postulación - '+empresa;
+
+show('form');
+}
+
+/* ENVIAR */
+function enviar(){
+
+let nombre =
+document.getElementById('nombre').value.trim();
+
+let correo =
+document.getElementById('correo').value.trim();
+
+let telefono =
+document.getElementById('telefono').value.trim();
+
+if(nombre==='' || correo==='' || telefono===''){
+
+alert('⚠️ Completa los campos');
+return;
+}
+
+alert('✅ Postulación enviada correctamente');
+
+show('jobs');
+
+/* LIMPIAR DESPUÉS DE ENVIAR */
+document.getElementById('nombre').value='';
+document.getElementById('correo').value='';
+document.getElementById('telefono').value='';
+document.getElementById('experiencia').value='';
+
+}
+
+/* CHAT */
+function sendMessage(){
+
+let input=document.getElementById('input');
+
+if(input.value.trim()==='') return;
+
+addMsg(input.value,'user');
+
+let text=input.value.toLowerCase();
+
+input.value='';
+
+setTimeout(()=>{
+
+let r='No entendí tu mensaje 😅';
+
+if(text.includes('hola'))
+r='Hola 👋';
+
+else if(text.includes('trabajo'))
+r='Ve a 💼 empleos';
+
+else if(text.includes('contacto'))
+r='📧 empresajasen@gmail.com';
+
+else if(text.includes('gracias'))
+r='😊 De nada';
+
+addMsg(r,'bot');
+
+},500);
+
+}
+
+function addMsg(text,type){
+
+let msg=document.createElement('div');
+
+msg.className='message '+type;
+
+msg.textContent=text;
+
+let chat=document.getElementById('messages');
+
+chat.appendChild(msg);
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+</script>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- INICIO -->
+<section id="inicio" class="section active header">
+<img src="logo.jpg" class="logo">
+<p class="slogan">Encuentra tu próximo empleo</p>
+<button onclick="show('jobs')">Entrar</button>
+</section>
+
+<main>
+
+<!-- EMPLEOS -->
+<section id="jobs" class="section">
+
+<div class="card"><h3>Grupo Bimbo</h3><p>Producción</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>Amazon México</h3><p>Logística</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>BBVA México</h3><p>Banca</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>OXXO</h3><p>Cajero</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>Coca-Cola FEMSA</h3><p>Distribución</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>PepsiCo</h3><p>Reparto</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>Walmart México</h3><p>Ventas</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>Samsung México</h3><p>Ventas</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>Mercado Libre</h3><p>Almacén</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>Telcel</h3><p>Atención</p><button onclick="openForm()">Postular</button></div>
+<div class="card"><h3>Starbucks</h3><p>Barista</p><button onclick="openForm()">Postular</button></div>
+
+</section>
+
+<!-- INFORMACIÓN -->
+<section id="info" class="section">
+
+<div class="card"><h3>MISIÓN</h3><p>Conectar personas con empleo de forma rápida y segura.</p></div>
+<div class="card"><h3>VISIÓN</h3><p>Ser líder en empleo a nivel nacional.</p></div>
+<div class="card"><h3>OBJETIVOS</h3><p>• Facilitar vacantes<br>• Agilizar búsqueda<br>• Mejorar comunicación</p></div>
+<div class="card"><h3>📞 Contacto</h3><p>empresajasen@gmail.com<br>@JASEN.COBAEJ</p></div>
+
+</section>
+
+<!-- FORM -->
+<section id="form" class="section">
+<div class="card">
+<h2>📋 Postulación</h2>
+<input placeholder="Nombre">
+<input placeholder="Correo">
+<input placeholder="Teléfono">
+<textarea placeholder="Experiencia"></textarea>
+<button onclick="enviar()">Enviar</button>
+<button class="btn-sec" onclick="show('jobs')">⬅ Regresar</button>
+</div>
+</section>
+
+<!-- CHAT -->
+<section id="chat" class="section">
+<div class="card">
+<h3>💬 Chat JASEN</h3>
+
+<div class="messages" id="messages"></div>
+
+<div class="chat-input">
+<input id="input" placeholder="Escribe un mensaje...">
+<button onclick="sendMessage()">➤</button>
+</div>
+
+</div>
+</section>
+
+</main>
+
+<!-- NAV -->
+<div class="bottom-nav">
+<button onclick="show('inicio',this)">🏠</button>
+<button onclick="show('jobs',this)">💼</button>
+<button onclick="show('info',this)">ℹ️</button>
+<button onclick="show('chat',this)">💬</button>
+</div>
+
+</div>
+
+<script>
+function show(id,btn){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+
+if(btn){
+document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+}
+}
+
+function openForm(){show('form');}
+
+function enviar(){
+alert("✅ Postulación enviada");
+show('jobs');
+}
+
+/* CHAT */
+function sendMessage(){
+let input=document.getElementById('input');
+if(input.value==='')return;
+
+addMsg(input.value,'user');
+let text=input.value.toLowerCase();
+input.value='';
+
+setTimeout(()=>{
+let r="No entendí tu mensaje";
+
+if(text.includes('hola')) r="Hola 👋";
+else if(text.includes('trabajo')) r="Ve a 💼 empleos";
+else if(text.includes('contacto')) r="empresajasen@gmail.com";
+
+addMsg(r,'bot');
+},500);
+}
+
+function addMsg(text,type){
+let msg=document.createElement('div');
+msg.className='message '+type;
+msg.textContent=text;
+
+let chat=document.getElementById('messages');
+chat.appendChild(msg);
+chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+</body>
+</html>
